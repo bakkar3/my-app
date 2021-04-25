@@ -1,24 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useState } from "react";
+import "./App.css";
+import initialiSongs from './data/songs.json';
 
 function App() {
+
+  const [searchText, setSearchText] = useState('');
+
+  const [songs] = useState(initialiSongs);
+
+  const searchSongs = (userSearchText) => {
+    setSearchText(userSearchText);
+  }
+  const toggleDescription = (index) => {
+    console.log('in toggleDescriptiong')
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Song Database</h1>
+      <div>
+        <input type="text" onChange={((e) => searchSongs(e
+          .target.value))} />
+
+      </div>
+      <p>There are {songs.length} songs.</p>
+      <ul>
+        {songs.map((song, index) => {
+          return (
+            <>
+              {(song.author.toLowerCase().includes(searchText.toLowerCase()) ||
+                song.name.toLowerCase().includes(searchText.toLowerCase())) && (
+                <li> <span onClick={() => toggleDescription(index)}>{song.author} - {song.name}
+                </span>
+                  
+                  {song.showDescripition && (
+                  <ul>
+                    <li>{song.description}</li>
+                  </ul>
+                )}
+                </li>
+              )} 
+              
+            </>
+          )
+        })}
+      </ul>
     </div>
   );
 }
